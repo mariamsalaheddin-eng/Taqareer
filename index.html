@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الورد اليومي</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Tajawal',sans-serif;background:#fdf6fb;min-height:100vh}
+
+/* LOGIN */
+#login-screen{display:flex;position:fixed;inset:0;background:linear-gradient(135deg,#bbdefb,#c5cae9);z-index:999;align-items:center;justify-content:center;padding:20px;text-align:center}
+.login-box{background:white;border-radius:20px;padding:36px 28px;max-width:340px;width:100%;box-shadow:0 8px 40px rgba(21,101,192,.2);border:2px solid #90caf9}
+.google-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:12px 20px;background:white;border:2px solid #90caf9;border-radius:12px;font-family:‘Tajawal’,sans-serif;font-size:14px;color:#1565c0;cursor:pointer}
+
+/* USER BAR */
+#user-bar{display:none;background:white;border-bottom:1px solid #f8e0ee;padding:8px 16px}
+.ub{max-width:700px;margin:0 auto;display:flex;align-items:center;gap:8px}
+#uname{flex:1;font-size:12px;color:#555;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.admin-badge{background:linear-gradient(135deg,#e91e8c,#9c27b0);color:white;border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700;display:none}
+.sign-out{background:transparent;border:1px solid #f48fb1;color:#c2607a;border-radius:20px;padding:3px 10px;font-size:11px;cursor:pointer;font-family:‘Tajawal’,sans-serif}
+
+/* NOTIFICATIONS */
+.nw{position:relative}
+#nbell{background:none;border:none;font-size:18px;cursor:pointer;padding:2px 4px}
+#nbadge{position:absolute;top:-2px;left:-2px;background:#e91e8c;color:white;border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:700;display:none;align-items:center;justify-content:center}
+#ndd{display:none;position:absolute;top:36px;left:0;width:280px;background:white;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.15);border:1px solid #fce4ec;z-index:200;max-height:300px;overflow-y:auto}
+.nhdr{padding:10px 14px;font-size:12px;font-weight:700;color:#c2607a;border-bottom:1px solid #fce4ec}
+.nitem{padding:10px 14px;border-bottom:1px solid #fce4ec;cursor:pointer;display:flex;gap:8px;align-items:flex-start}
+.nitem:hover{background:#fff0f5}
+.ndot{width:8px;height:8px;border-radius:50%;background:#e91e8c;flex-shrink:0;margin-top:4px}
+.ntxt{font-size:12px;color:#333;flex:1;line-height:1.4}
+.ntime{font-size:10px;color:#aaa}
+.nempty{padding:20px;text-align:center;font-size:12px;color:#bbb}
+
+/* TABS */
+#tabs-bar{display:none;background:white;border-bottom:2px solid #f8e0ee;position:sticky;top:0;z-index:10}
+.ti{max-width:700px;margin:0 auto;display:flex}
+.tab-btn{flex:1;padding:12px 8px;font-family:‘Tajawal’,sans-serif;font-size:12px;font-weight:600;color:#aaa;background:none;border:none;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s}
+.tab-btn.active{color:#e91e8c;border-bottom-color:#e91e8c}
+
+/* APP WRAPPER */
+#app{display:none;padding:14px 12px 60px}
+
+/* HEADER */
+.hd{max-width:700px;margin:0 auto 14px;background:linear-gradient(135deg,#f8bbd0,#e1bee7);border-radius:18px;padding:18px 18px 14px;text-align:center;position:relative;box-shadow:0 4px 20px rgba(233,30,140,.12)}
+.hd-bis{font-family:‘Amiri’,serif;font-size:18px;color:white;margin-bottom:2px}
+.hd-ttl{font-family:‘Amiri’,serif;font-size:16px;color:white;margin-bottom:3px}
+.hd-tmpl{font-size:11px;color:rgba(255,255,255,.8);margin-bottom:6px}
+.hd-date{font-size:11px;color:rgba(255,255,255,.7);margin-bottom:10px}
+#sbtn{position:absolute;top:12px;left:12px;background:rgba(255,255,255,.3);border:none;border-radius:10px;width:34px;height:34px;font-size:17px;cursor:pointer}
+#sbtn.active{background:#e91e8c}
+#ebadge{display:none;position:absolute;top:50px;right:12px;background:#e91e8c;border-radius:8px;padding:3px 8px;font-size:10px;color:white;font-weight:700}
+.pb{background:rgba(255,255,255,.25);border-radius:10px;padding:10px 14px}
+.pm{display:flex;justify-content:space-between;font-size:12px;color:white;margin-bottom:5px}
+.pt{background:rgba(255,255,255,.3);border-radius:99px;height:6px;overflow:hidden}
+.pf{height:100%;border-radius:99px;background:linear-gradient(90deg,#81c784,#e91e8c);width:0%;transition:width .4s}
+#ss{font-size:10px;color:rgba(255,255,255,.75);margin-top:4px;text-align:left}
+
+/* BUTTONS */
+#ndwrap{max-width:700px;margin:0 auto 12px}
+#ndbtn{width:100%;padding:10px;background:linear-gradient(135deg,#e91e8c,#9c27b0);color:white;border:none;border-radius:12px;font-family:‘Tajawal’,sans-serif;font-size:13px;font-weight:700;cursor:pointer}
+
+/* TEMPLATE BAR */
+#tbar{display:none;max-width:700px;margin:0 auto 12px;background:linear-gradient(135deg,#fff0f5,#f3e5f5);border-radius:12px;padding:10px 14px;border:1px solid #f48fb1}
+.trow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tlbl{font-size:11px;color:#c2607a;font-weight:700;white-space:nowrap}
+#tnbadge{flex:1;font-size:12px;color:#e91e8c;font-weight:700;background:white;border-radius:20px;padding:3px 10px;border:1px solid #f48fb1;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tbtn{background:#e91e8c;color:white;border:none;border-radius:20px;padding:4px 12px;font-size:11px;font-family:‘Tajawal’,sans-serif;cursor:pointer;white-space:nowrap}
+.tbtn.s{background:white;color:#e91e8c;border:1px solid #f48fb1}
+
+/* ADD CARD */
+#acbox{display:none;max-width:700px;margin:0 auto 12px;background:white;border-radius:12px;padding:12px 14px;border:2px dashed #f48fb1}
+#acbox .lbl{font-size:12px;font-weight:700;color:#e91e8c;margin-bottom:8px}
+#acbox .row{display:flex;gap:6px;flex-wrap:wrap}
+#acbox select{border:1px solid #eee;border-radius:8px;padding:5px 8px;font-size:16px}
+#acbox input{flex:1;border:1px solid #eee;border-radius:8px;padding:5px 10px;font-size:13px;font-family:‘Tajawal’,sans-serif;text-align:right;min-width:140px}
+#acbox button{background:#e91e8c;color:white;border:none;border-radius:6px;padding:5px 14px;font-size:12px;cursor:pointer;font-family:‘Tajawal’,sans-serif}
+
+/* GRID */
+#grid{max-width:700px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px}
+.card{background:white;border-radius:14px;overflow:hidden;box-shadow:0 3px 14px rgba(0,0,0,.09);border:1px solid rgba(0,0,0,.04)}
+.card.hid{opacity:.5;border:2px dashed #ddd}
+.ch{padding:11px 12px;display:flex;align-items:center;gap:8px}
+.ci{font-size:17px;flex-shrink:0}
+.ct{flex:1;font-family:‘Amiri’,serif;font-size:12px;color:white;font-weight:700;line-height:1.3}
+.cc{background:rgba(255,255,255,.25);border-radius:20px;padding:2px 8px;font-size:11px;color:white;font-weight:700;flex-shrink:0}
+.cebtns{display:none;gap:4px;flex-shrink:0}
+.cp{height:3px;background:rgba(0,0,0,.06)}
+.cpf{height:100%;opacity:.6;transition:width .3s}
+.item{display:flex;align-items:flex-start;gap:8px;padding:7px 12px;border-bottom:1px solid rgba(0,0,0,.04);cursor:pointer;transition:background .15s}
+.item:last-child{border-bottom:none}
+.item.done{background:rgba(26,74,40,.04)}
+.item.hitm{background:rgba(0,0,0,.02);cursor:default}
+.chk{width:19px;height:19px;border-radius:5px;border:2px solid #ddd;background:white;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all .15s;font-size:11px;font-weight:900;color:white}
+.itxt{font-size:12px;line-height:1.6;flex:1;color:#333}
+.item.done .itxt{color:#bbb;text-decoration:line-through;text-decoration-color:#ccc}
+.item.hitm .itxt{color:#bbb;font-style:italic}
+.iebtns{display:none;gap:3px;flex-shrink:0}
+.air{display:none;gap:6px;padding:7px 10px;background:#fdf6fb;border-top:1px dashed #f8bbd0}
+.air input{flex:1;border:1px solid #f8bbd0;border-radius:8px;padding:4px 8px;font-size:12px;font-family:‘Tajawal’,sans-serif;text-align:right;min-width:0}
+.ebtn{border:none;border-radius:6px;padding:2px 8px;font-size:10px;cursor:pointer;color:white;font-family:‘Tajawal’,sans-serif;white-space:nowrap}
+
+/* EDIT MODE */
+body.edit .cc{display:none}
+body.edit .cebtns{display:flex}
+body.edit .chk{display:none}
+body.edit .iebtns{display:flex}
+body.edit .item{cursor:default}
+body.edit .cp{display:none}
+body.edit .air{display:flex}
+body.edit #acbox{display:block}
+body.edit #ebadge{display:block}
+body.edit #ndwrap{display:none}
+body.edit #tbar{display:block}
+
+/* FOOTER */
+.wf{text-align:center;margin-top:20px;max-width:700px;margin-left:auto;margin-right:auto}
+.wf p{font-family:‘Amiri’,serif;color:#c2607a;font-size:13px;margin-bottom:3px}
+
+/* TABS CONTENT */
+.tab-content{max-width:700px;margin:0 auto;padding:14px 0 60px}
+.pf-row{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.pbtn{padding:5px 14px;border-radius:20px;border:1px solid #f48fb1;background:white;color:#c2607a;font-size:12px;font-family:‘Tajawal’,sans-serif;cursor:pointer}
+.pbtn.active{background:#e91e8c;color:white;border-color:#e91e8c}
+
+/* HISTORY */
+.cwrap{background:white;border-radius:14px;padding:14px;box-shadow:0 2px 10px rgba(0,0,0,.07);margin-bottom:14px}
+.ctitle{font-size:12px;font-weight:700;color:#c2607a;margin-bottom:10px}
+.calwrap{background:white;border-radius:14px;padding:14px;box-shadow:0 2px 10px rgba(0,0,0,.07);margin-bottom:14px}
+.calhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.calnav{background:none;border:1px solid #f48fb1;border-radius:8px;width:28px;height:28px;cursor:pointer;color:#e91e8c;font-size:14px}
+.calmth{font-family:‘Amiri’,serif;font-size:14px;color:#c2607a;font-weight:700}
+.calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.caldn{font-size:9px;color:#aaa;text-align:center;padding:3px 0}
+.cald{aspect-ratio:1;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;border:1px solid transparent;color:#444;transition:all .15s}
+.cald:hover{background:#fce4ec}
+.cald.hd2{background:#fce4ec;color:#e91e8c;font-weight:700}
+.cald.tod{border-color:#f48fb1}
+.cald.emp{cursor:default}
+.hlist{display:flex;flex-direction:column;gap:10px}
+.hcard{background:white;border-radius:14px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.07)}
+.hhdr{padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer}
+.hdate{font-family:‘Amiri’,serif;font-size:13px;color:#c2607a;font-weight:700;flex:1}
+.hpct{border-radius:20px;padding:3px 10px;font-size:12px;font-weight:700}
+.hpct.g{background:#e8f5e9;color:#2e7d32}
+.hpct.m{background:#fff8e1;color:#f57f17}
+.hpct.l{background:#fce4ec;color:#e91e8c}
+.hbody{display:none;border-top:1px solid #fce4ec;padding:12px 14px}
+.hbody.open{display:block}
+
+/* PERFORMANCE */
+.psec{margin-bottom:14px}
+.pshdr{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px 12px 0 0}
+.psttl{font-family:‘Amiri’,serif;font-size:12px;color:white;font-weight:700;flex:1}
+.psavg{background:rgba(255,255,255,.25);border-radius:20px;padding:2px 8px;font-size:11px;color:white;font-weight:700}
+.pitm{display:flex;align-items:center;gap:8px;padding:8px 14px;background:white;border-bottom:1px solid rgba(0,0,0,.04)}
+.pitm:last-child{border-bottom:none;border-radius:0 0 12px 12px}
+.ptxt{font-size:11px;color:#333;flex:1;line-height:1.4}
+.pbar{width:80px;flex-shrink:0}
+.pbtrack{height:6px;background:#f0e0f0;border-radius:99px;overflow:hidden}
+.pbfill{height:100%;border-radius:99px;transition:width .4s}
+.ppct{font-size:10px;font-weight:700;text-align:left;margin-top:2px}
+
+/* ADMIN PANEL */
+.apanel{background:white;border-radius:14px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.07);margin-bottom:14px}
+.apanel h3{font-family:‘Amiri’,serif;font-size:15px;color:#c2607a;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.urow{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f8e0ee}
+.urow:last-child{border-bottom:none}
+.uavatar{width:36px;height:36px;border-radius:50%;background:#fce4ec;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;overflow:hidden}
+.uinfo{flex:1}
+.uname2{font-size:13px;color:#333;font-weight:600}
+.uemail{font-size:10px;color:#aaa}
+.urole{font-size:10px;border-radius:20px;padding:2px 8px;font-weight:700}
+.urole.admin{background:linear-gradient(135deg,#e91e8c,#9c27b0);color:white}
+.urole.user{background:#fce4ec;color:#e91e8c}
+.ubtns{display:flex;gap:4px}
+.ainput{width:100%;border:1px solid #f48fb1;border-radius:10px;padding:8px 12px;font-size:13px;font-family:‘Tajawal’,sans-serif;text-align:right;outline:none;margin-bottom:8px}
+
+/* MODALS */
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:300;align-items:flex-end;justify-content:center}
+.mo.open{display:flex}
+.mb{background:white;border-radius:20px 20px 0 0;width:100%;max-width:700px;max-height:85vh;overflow-y:auto;padding:20px 16px 40px}
+.mt{font-family:‘Amiri’,serif;font-size:16px;color:#c2607a;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.mc{background:#fce4ec;border:none;border-radius:50%;width:28px;height:28px;font-size:14px;cursor:pointer;color:#e91e8c}
+.tirow{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fdf6fb;border-radius:10px;margin-bottom:8px;border:1px solid #f8e0ee}
+.tiname{flex:1;font-size:13px;color:#333;font-weight:600}
+.timeta{font-size:10px;color:#aaa}
+.tinput{display:flex;gap:8px;margin-bottom:14px}
+.tinput input{flex:1;border:1px solid #f48fb1;border-radius:10px;padding:8px 12px;font-size:13px;font-family:‘Tajawal’,sans-serif;text-align:right;outline:none}
+.tsw{position:relative;width:36px;height:20px}
+.tsw input{opacity:0;width:0;height:0}
+.tsl{position:absolute;inset:0;background:#ddd;border-radius:20px;cursor:pointer;transition:.3s}
+.tsl:before{content:’’;position:absolute;height:14px;width:14px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.3s}
+input:checked+.tsl{background:#e91e8c}
+input:checked+.tsl:before{transform:translateX(16px)}
+
+/* VIEWER MODAL (admin read-only report) */
+#view-modal .mb{max-height:90vh}
+</style>
+
+</head>
+<body>
+
+<!-- LOGIN -->
+
+<div id="login-screen">
+  <div class="login-box">
+    <div style="font-size:48px;margin-bottom:14px">🕋</div>
+    <div style="font-family:'Amiri',serif;font-size:22px;color:#1565c0;margin-bottom:24px">الورد اليومي</div>
+    <button class="google-btn" onclick="signInG()">
+      <img src="https://www.google.com/favicon.ico" width="18"> تسجيل الدخول بـ Google
+    </button>
+    <div id="lerr" style="margin-top:10px;font-size:12px;color:#ef5350;display:none"></div>
+  </div>
+</div>
+
+<!-- USER BAR -->
+
+<div id="user-bar">
+  <div class="ub">
+    <img id="uavatar" src="" width="26" height="26" style="border-radius:50%">
+    <span id="uname"></span>
+    <span id="abadge" class="admin-badge">مشرف 👑</span>
+    <div class="nw">
+      <button id="nbell" onclick="toggleN()">🔔</button>
+      <div id="nbadge"></div>
+      <div id="ndd">
+        <div class="nhdr">الإشعارات</div>
+        <div id="nlist"><div class="nempty">لا يوجد إشعارات</div></div>
+      </div>
+    </div>
+    <button class="sign-out" onclick="signOutG()">خروج</button>
+  </div>
+</div>
+
+<!-- TABS -->
+
+<div id="tabs-bar">
+  <div class="ti">
+    <button class="tab-btn active" onclick="showTab('ward',this)">📋 الورد</button>
+    <button class="tab-btn" onclick="showTab('history',this)">📊 السجل</button>
+    <button class="tab-btn" onclick="showTab('perf',this)">🏆 الأداء</button>
+    <button class="tab-btn" id="admin-tab-btn" style="display:none" onclick="showTab('admin',this)">👑 المشرف</button>
+  </div>
+</div>
+
+<!-- APP -->
+
+<div id="app">
+
+  <!-- WARD -->
+
+  <div id="tab-ward">
+    <div class="hd">
+      <button id="sbtn" onclick="toggleEdit()">⚙️</button>
+      <button id="theme-toggle" onclick="toggleTheme()" style="position:absolute;top:12px;right:12px;background:rgba(255,255,255,.3);border:none;border-radius:20px;padding:4px 10px;font-size:12px;cursor:pointer;font-family:'Tajawal',sans-serif;color:white;font-weight:600">🌸 بنات</button>
+      <div id="ebadge">وضع التعديل</div>
+      <div class="hd-bis">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+      <div class="hd-ttl">الورد اليومي</div>
+      <div class="hd-tmpl" id="htname">الورد الافتراضي</div>
+      <div class="hd-date" id="hdate"></div>
+      <div class="pb">
+        <div class="pm"><span>أُنجز <b id="pd">0</b> من <b id="pt">0</b> بنداً</span><b id="pp">0%</b></div>
+        <div class="pt"><div class="pf" id="pb"></div></div>
+        <div id="ss">⏳ جاري المزامنة...</div>
+      </div>
+    </div>
+    <div id="ndwrap"><button id="ndbtn" onclick="startNewDay()">🌅 ابدأ يوم جديد</button></div>
+    <div id="tbar">
+      <div class="trow">
+        <span class="tlbl">🎨 Template:</span>
+        <div id="tnbadge">الورد الافتراضي</div>
+        <button class="tbtn s" onclick="openT('save')">حفظ</button>
+        <button class="tbtn s" onclick="openT('saveas')">حفظ كـ</button>
+        <button class="tbtn" onclick="openT('pick')">تغيير</button>
+      </div>
+    </div>
+    <div id="acbox">
+      <div class="lbl">➕ إضافة كارت جديد</div>
+      <div class="row">
+        <select id="nic">
+          <option>🕌</option><option>🌙</option><option>💎</option><option>🤝</option>
+          <option>📖</option><option>⚖️</option><option>☀️</option><option>📿</option>
+          <option>🏠</option><option>🤲</option><option>🌃</option><option>🪥</option>
+          <option>🧠</option><option>🌸</option><option>🌿</option><option>⭐</option><option>🕊️</option><option>🌺</option>
+        </select>
+        <input id="ntitle" placeholder="عنوان الكارت..." onkeydown="if(event.key==='Enter')addSec()">
+        <button onclick="addSec()">إضافة ✓</button>
+      </div>
+    </div>
+    <div id="grid"></div>
+    <div class="wf">
+      <p>اللهم لا سهل إلا ما جعلته سهلا</p>
+      <p style="color:#f48fb1;font-size:11px;margin-top:2px">لا حول ولا قوة إلا بالله</p>
+    </div>
+  </div>
+
+  <!-- HISTORY -->
+
+  <div id="tab-history" style="display:none" class="tab-content">
+    <div id="hist-follower-bar" style="display:none;margin-bottom:12px;">
+      <div style="background:linear-gradient(135deg,#fff0f5,#f3e5f5);border-radius:12px;padding:10px 14px;border:1px solid #f48fb1;">
+        <div style="font-size:11px;color:#c2607a;font-weight:700;margin-bottom:6px;">👁 عرض سجل:</div>
+        <select id="hist-follower-sel" onchange="switchHistUser(this.value)" style="width:100%;border:1px solid #f48fb1;border-radius:8px;padding:7px 10px;font-size:13px;font-family:'Tajawal',sans-serif;color:#333;background:white;">
+          <option value="self">سجلي الشخصي</option>
+        </select>
+      </div>
+    </div>
+    <div class="pf-row">
+      <button class="pbtn active" onclick="setHP(7,this)">أسبوع</button>
+      <button class="pbtn" onclick="setHP(30,this)">شهر</button>
+      <button class="pbtn" onclick="setHP(90,this)">٣ أشهر</button>
+      <button class="pbtn" onclick="setHP(0,this)">الكل</button>
+    </div>
+    <div class="cwrap"><div class="ctitle">📊 نسبة الإنجاز اليومي</div><canvas id="hchart" style="width:100%;height:160px;display:block"></canvas></div>
+    <div class="calwrap">
+      <div class="calhdr">
+        <button class="calnav" onclick="calN(-1)">›</button>
+        <div class="calmth" id="calmth"></div>
+        <button class="calnav" onclick="calN(1)">‹</button>
+      </div>
+      <div class="calgrid" id="calnames"></div>
+      <div class="calgrid" id="calgrid"></div>
+    </div>
+    <div class="hlist" id="hlist"></div>
+  </div>
+
+  <!-- PERFORMANCE -->
+
+  <div id="tab-perf" style="display:none" class="tab-content">
+    <div id="perf-follower-bar" style="display:none;margin-bottom:12px;">
+      <div style="background:linear-gradient(135deg,#fff0f5,#f3e5f5);border-radius:12px;padding:10px 14px;border:1px solid #f48fb1;">
+        <div style="font-size:11px;color:#c2607a;font-weight:700;margin-bottom:6px;">👁 عرض أداء:</div>
+        <select id="perf-follower-sel" onchange="switchPerfUser(this.value)" style="width:100%;border:1px solid #f48fb1;border-radius:8px;padding:7px 10px;font-size:13px;font-family:'Tajawal',sans-serif;color:#333;background:white;">
+          <option value="self">أدائي الشخصي</option>
+        </select>
+      </div>
+    </div>
+    <div class="pf-row">
+      <button class="pbtn active" onclick="setPP(7,this)">أسبوع</button>
+      <button class="pbtn" onclick="setPP(30,this)">شهر</button>
+      <button class="pbtn" onclick="setPP(90,this)">٣ أشهر</button>
+      <button class="pbtn" onclick="setPP(0,this)">الكل</button>
+    </div>
+    <div id="pcontent"></div>
+  </div>
+
+  <!-- ADMIN -->
+
+  <div id="tab-admin" style="display:none" class="tab-content">
+    <div class="apanel">
+      <h3>👥 المستخدمون</h3>
+      <div id="users-list"><div class="nempty">جاري التحميل...</div></div>
+    </div>
+    <div class="apanel">
+      <h3>📢 إرسال Template للمتابعين</h3>
+      <p style="font-size:12px;color:#aaa;margin-bottom:10px">اختر template من مكتبتك وأرسله لكل المتابعين</p>
+      <div id="bc-tmpl-list" style="margin-bottom:10px"></div>
+      <button class="tbtn" onclick="broadcastTmpl()" style="width:100%;padding:8px">📢 إرسال للجميع</button>
+    </div>
+    <div class="apanel">
+      <h3>📨 دعوة مشرف</h3>
+      <input class="ainput" id="invEmail" placeholder="إيميل المستخدم...">
+      <button class="tbtn" onclick="inviteAdmin()" style="width:100%;padding:8px">إرسال دعوة مشرف</button>
+    </div>
+    <div class="apanel">
+      <h3>👁 طلب متابعة مستخدم</h3>
+      <input class="ainput" id="watchEmail" placeholder="إيميل المستخدم...">
+      <button class="tbtn" onclick="sendWatchReq()" style="width:100%;padding:8px">إرسال طلب متابعة</button>
+    </div>
+    <div class="apanel">
+      <h3>📋 المتابَعون</h3>
+      <div id="followers-list"><div class="nempty">لا يوجد متابَعون بعد</div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- TEMPLATE MODAL -->
+
+<div id="tmodal" class="mo">
+  <div class="mb">
+    <div class="mt"><span id="tmtitle">Templates</span><button class="mc" onclick="closeT()">✕</button></div>
+    <div id="tmbody"></div>
+  </div>
+</div>
+
+<!-- DAY DETAIL MODAL -->
+
+<div id="dmodal" class="mo">
+  <div class="mb">
+    <div class="mt"><span id="dmtitle"></span><button class="mc" onclick="closeD()">✕</button></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;background:#fff8fb;border-radius:10px;padding:8px 12px;margin-bottom:12px">
+      <span style="font-size:12px;color:#c2607a">وضع التعديل</span>
+      <label class="tsw"><input type="checkbox" id="dedit" onchange="toggleDE(this.checked)"><span class="tsl"></span></label>
+    </div>
+    <div id="dmcontent"></div>
+  </div>
+</div>
+
+<!-- VIEWER MODAL (admin views user report) -->
+
+<div id="view-modal" class="mo">
+  <div class="mb">
+    <div class="mt"><span id="vm-title">تقرير المستخدم</span><button class="mc" onclick="closeVM()">✕</button></div>
+    <div id="vm-content"></div>
+  </div>
+</div>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+import{getDatabase,ref,onValue,update,set,get,query,orderByChild,equalTo}from"https://www.gstatic.com/firebasejs/11.0.0/firebase-database.js";
+import{getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+
+const cfg={apiKey:"AIzaSyCPedbeFpfZT6f1jVy6yaUzbmy5QTON0c4",authDomain:"taqreer-232d0.firebaseapp.com",databaseURL:"https://taqreer-232d0-default-rtdb.europe-west1.firebasedatabase.app",projectId:"taqreer-232d0",storageBucket:"taqreer-232d0.firebasestorage.app",messagingSenderId:"247823828391",appId:"1:247823828391:web:3dafa21b30811162066282"};
+const app=initializeApp(cfg),db=getDatabase(app),auth=getAuth(app),prov=new GoogleAuthProvider();
+const ADMIN_EMAILS=['mariamsalaheddin@gmail.com','moatazsalaheddin@gmail.com','mohamedabderrahman@gmail.com'];
+const PASTELS=["#f48fb1","#ce93d8","#ffcc80","#80cbc4","#90caf9","#ef9a9a","#ffe082","#b39ddb","#80deea","#9fa8da","#a5d6a7","#c5cae9"];
+const MONTHS=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+const DAYS=['ح','ن','ث','ر','خ','ج','س'];
+
+// ── جدول عشر ذي الحجة (Default) ─────────────────────
+const DEF=[
+  {id:"s1",icon:"🕌",color:"#90caf9",title:"صلاة الجماعة",hidden:false,items:[
+    {id:"i1",text:"صلاة الفجر",hidden:false},
+    {id:"i2",text:"صلاة الظهر",hidden:false},
+    {id:"i3",text:"صلاة العصر",hidden:false},
+    {id:"i4",text:"صلاة المغرب",hidden:false},
+    {id:"i5",text:"صلاة العشاء",hidden:false}]},
+  {id:"s2",icon:"📿",color:"#a5d6a7",title:"الذكر",hidden:false,items:[
+    {id:"i1",text:"سبحان الله والحمد لله ولا إله إلا الله والله أكبر ١٠٠ مرة على الأقل",hidden:false}]},
+  {id:"s3",icon:"🌙",color:"#9fa8da",title:"الصيام",hidden:false,items:[
+    {id:"i1",text:"الصيام لو قدرت — بس يوم عرفة لازم 🌟",hidden:false}]},
+  {id:"s4",icon:"💝",color:"#80cbc4",title:"الصدقة",hidden:false,items:[
+    {id:"i1",text:"أخرج صدقة من مصروفك",hidden:false}]},
+  {id:"s5",icon:"📖",color:"#80deea",title:"القرآن",hidden:false,items:[
+    {id:"i1",text:"اقرأ أو احفظ شيئاً من القرآن",hidden:false}]},
+  {id:"s6",icon:"🌃",color:"#b39ddb",title:"قيام الليل",hidden:false,items:[
+    {id:"i1",text:"صلاة ركعتين قيام بـ١٠ آيات على الأقل",hidden:false},
+    {id:"i2",text:"صلاة الوتر",hidden:false}]},
+  {id:"s7",icon:"🕌",color:"#c8e6c9",title:"سنة الجمعة",hidden:false,items:[
+    {id:"i1",text:"سورة الكهف يوم الجمعة",hidden:false}]}
+];
+
+// ── الورد اليومي المفصّل ──────────────────────────────
+const DEF_MUFASSAL=[
+  {id:"s1",icon:"🕌",color:"#f48fb1",title:"وَالْمُقِيمِينَ الصَّلَاةَ",hidden:false,items:[
+    {id:"i1",text:"المحافظة على الوضوء",hidden:false},{id:"i2",text:"عدم الإسراف في الماء",hidden:false},
+    {id:"i3",text:"الدعاء بعد الوضوء",hidden:false},{id:"i4",text:"ترديد الأذان والدعاء المأثور بعده",hidden:false},
+    {id:"i5",text:"الدعاء بين الأذان والإقامة",hidden:false},{id:"i6",text:"سور مختلفة",hidden:false},
+    {id:"i7",text:"١٠ تسبيحات",hidden:false},{id:"i8",text:"النظر إلى الإصبع في التشهد",hidden:false},
+    {id:"i9",text:"الدعاء في السجود",hidden:false},{id:"i10",text:"التسبيحات بعد الصلاة",hidden:false},
+    {id:"i11",text:"تسبيحات ما بعد الفجر والمغرب (وهو ثانٍ رجله)",hidden:false},
+    {id:"i12",text:"صلاة الفجر بـ٦٠ آية على الأقل",hidden:false},
+    {id:"i13",text:"صلاة فجر الجمعة بالسجدة والإنسان",hidden:false},
+    {id:"i14",text:"كم اختلس الشيطان من صلاتك؟",hidden:false}]},
+  {id:"s2",icon:"🌙",color:"#ce93d8",title:"السَّائِحُونَ",hidden:false,items:[
+    {id:"i1",text:"صيام الإثنين والخميس وأيام الليالي البيض وما يعادل نصف رجب",hidden:false},
+    {id:"i2",text:"السحور مع استحضار فضائله",hidden:false},{id:"i3",text:"الدعاء أثناء الصيام وعند الفطر",hidden:false}]},
+  {id:"s3",icon:"💎",color:"#ffcc80",title:"إِلَّا مَنْ أَتَى اللَّهَ بِقَلْبٍ سَلِيمٍ",hidden:false,items:[
+    {id:"i1",text:"من حسن إسلام المرء تركه ما لا يعنيه",hidden:false},{id:"i2",text:"لا تغضب",hidden:false},
+    {id:"i3",text:"ومن يوق شح نفسه فأولئك هم المفلحون",hidden:false},
+    {id:"i4",text:"وقل لعبادي يقولوا التي هي أحسن",hidden:false},
+    {id:"i5",text:"أولئك يسارعون في الخيرات",hidden:false},
+    {id:"i6",text:"لا يؤمن أحدكم حتى يحب لأخيه ما يحب لنفسه",hidden:false}]},
+  {id:"s4",icon:"🤝",color:"#80cbc4",title:"وَالْمُؤْمِنُونَ وَالْمُؤْمِنَاتُ بَعْضُهُمْ أَوْلِيَاءُ بَعْضٍ",hidden:false,items:[
+    {id:"i1",text:"قل هذه سبيلي أدعو إلى الله على بصيرة",hidden:false},
+    {id:"i2",text:"والله في عون العبد ما كان العبد في عون أخيه",hidden:false}]},
+  {id:"s5",icon:"📖",color:"#90caf9",title:"كِتَابٌ فِيهِ ذِكْرُكُمْ",hidden:false,items:[
+    {id:"i1",text:"فمي بشوق",hidden:false},{id:"i2",text:"ليدبروا آياته",hidden:false},
+    {id:"i3",text:"إعراب آية واحدة يومياً",hidden:false},{id:"i4",text:"السواك",hidden:false},
+    {id:"i5",text:"كفارة المجلس بعد التلاوة",hidden:false}]},
+  {id:"s6",icon:"⚖️",color:"#ef9a9a",title:"وَخَالِفِ النَّفْسَ",hidden:false,items:[
+    {id:"i1",text:"الطعام",hidden:false},{id:"i2",text:"الرياضة",hidden:false},
+    {id:"i3",text:"أقل وقت على شوشيال ميديا",hidden:false},
+    {id:"i4",text:"أيحب أحدكم أن يأكل لحم أخيه ميتاً فكرهتموه",hidden:false}]},
+  {id:"s7",icon:"☀️",color:"#ffe082",title:"أَمْسِكِ الشَّمْسَ!",hidden:false,items:[{id:"i1",text:"احسب وقتك الضائع",hidden:false}]},
+  {id:"s8",icon:"📿",color:"#b39ddb",title:"فَلَوْلَا أَنَّهُ كَانَ مِنَ الْمُسَبِّحِينَ",hidden:false,items:[
+    {id:"i1",text:"قبل طلوع الشمس وقبل الغروب",hidden:false},
+    {id:"i2",text:"كلمتان خفيفتان ثقيلتان حبيبتان",hidden:false},
+    {id:"i3",text:"إن الله وملائكته يصلون على النبي ﷺ",hidden:false},
+    {id:"i4",text:"النوم والاستيقاظ والأذكار الموظفة",hidden:false},
+    {id:"i5",text:"دعاء من تعار من الليل / خواتيم آل عمران",hidden:false},
+    {id:"i6",text:"جلسة الشروق",hidden:false},{id:"i7",text:"📿 سورتا الملك والسجدة",hidden:false}]},
+  {id:"s9",icon:"🏠",color:"#f48fb1",title:"رَحْمَةُ اللَّهِ وَبَرَكَاتُهُ عَلَيْكُمْ أَهْلَ الْبَيْتِ",hidden:false,items:[
+    {id:"i1",text:"وبالوالدين إحساناً",hidden:false},{id:"i2",text:"من أزواجنا وذرياتنا قرة أعين",hidden:false},
+    {id:"i3",text:"والأرحام",hidden:false},{id:"i4",text:"اللهم أعط منفقاً خلفاً",hidden:false}]},
+  {id:"s10",icon:"🤲",color:"#80deea",title:"إِذْ نَادَىٰ رَبَّهُ نِدَاءً خَفِيًّا",hidden:false,items:[
+    {id:"i1",text:"ساعة الإجابة",hidden:false},{id:"i2",text:"المستضعفين من الرجال والنساء والولدان",hidden:false},
+    {id:"i3",text:"جوف الليل",hidden:false},{id:"i4",text:"مناجاة الله عز وجل والثناء عليه",hidden:false},
+    {id:"i5",text:"دعاء الختمة",hidden:false}]},
+  {id:"s11",icon:"🌃",color:"#9fa8da",title:"نَاشِئَةُ اللَّيْلِ",hidden:false,items:[
+    {id:"i1",text:"كتب من المقنطرين (يوم واحد)",hidden:false},
+    {id:"i2",text:"سبحان الملك القدوس",hidden:false},
+    {id:"i3",text:"الصلاة بالمحفوظ مع طول القيام",hidden:false}]},
+  {id:"s12",icon:"🪥",color:"#a5d6a7",title:"مَطْهَرَةٌ لِلْفَمِ مَرْضَاةٌ لِلرَّبِّ",hidden:false,items:[
+    {id:"i1",text:"دخول البيت",hidden:false},{id:"i2",text:"الاستيقاظ",hidden:false},
+    {id:"i3",text:"الصلوات",hidden:false},{id:"i4",text:"القرآن",hidden:false}]},
+  {id:"s13",icon:"🧠",color:"#c5cae9",title:"رَبِّ زِدْنِي عِلْمًا",hidden:false,items:[
+    {id:"i1",text:"مذاكرة",hidden:false},{id:"i2",text:"رقائق",hidden:false},
+    {id:"i3",text:"تفسير لو مش في المذاكرة",hidden:false},
+    {id:"i4",text:"📿 التفكر في أسماء الله وصفاته فيما كان من يومك",hidden:false}]}
+];
+
+// ── State ──────────────────────────────────────────
+let secs=[],chk={},hist={},tmpls={},notifs={},followers={};
+let myWatcher=null; // {uid, name} — admin watching this user
+let uid=null,isAdmin=false,editMode=false;
+let _saving=false; // prevent listener from overwriting during save
+let tId='default',tName='جدول عشر ذي الحجة';
+let hPer=7,pPer=7,calY,calM;
+let dKey=null,dEdit=false;
+let sc=100,ic=1000;
+let unS=null,unC=null,unH=null;
+
+const $=id=>document.getElementById(id);
+const SS=(m,c)=>{$('ss').textContent=m;$('ss').style.color=c};
+const TK=()=>new Date().toISOString().slice(0,10);
+const FD=k=>new Date(k).toLocaleDateString('ar-EG',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+const FA=ts=>{if(!ts)return'';const d=Date.now()-ts,m=Math.floor(d/6e4),h=Math.floor(d/36e5),dy=Math.floor(d/864e5);return m<1?'الآن':m<60?`منذ ${m} دقيقة`:h<24?`منذ ${h} ساعة`:`منذ ${dy} يوم`};
+const LS=v=>{if(v&&typeof v==='object'){const a=Array.isArray(v)?v:Object.values(v);secs=a.filter(s=>s&&s.id)}; if(!secs.length)secs=JSON.parse(JSON.stringify(DEF))};
+
+// ── Auth ───────────────────────────────────────────
+window.signInG=()=>signInWithPopup(auth,prov).catch(()=>{});
+window.signOutG=()=>signOut(auth);
+
+onAuthStateChanged(auth,user=>{
+  if(user){
+    uid=user.uid;
+    $('login-screen').style.display='none';
+    $('user-bar').style.display='block';
+    $('tabs-bar').style.display='block';
+    $('app').style.display='block';
+    $('uname').textContent=user.displayName||user.email;
+    $('uavatar').src=user.photoURL||'';
+    $('hdate').textContent=FD(TK());
+    isAdmin=ADMIN_EMAILS.includes(user.email);
+    $('abadge').style.display=isAdmin?'inline-block':'none';
+    $('admin-tab-btn').style.display=isAdmin?'block':'none';
+    set(ref(db,`users/${uid}/mariam/profile`),{name:user.displayName,email:user.email,avatar:user.photoURL||'',role:isAdmin?'admin':'user',uid});
+    updateTB();
+
+    if(unS)unS(); if(unC)unC(); if(unH)unH();
+    const sR=ref(db,`users/${uid}/mariam/sections`);
+    const cR=ref(db,`users/${uid}/mariam/checked`);
+    const hR=ref(db,`users/${uid}/mariam/history`);
+
+    unS=onValue(sR,s=>{
+      if(_saving)return;
+      const v=s.val();
+      if(v===null||v===undefined){
+        // First time user - set defaults
+        secs=JSON.parse(JSON.stringify(DEF));
+        set(sR,secs);
+      }else if(typeof v==='object'){
+        let arr;
+        if(Array.isArray(v)){
+          arr=v;
+        }else{
+          // Firebase converts arrays to objects with numeric keys
+          const keys=Object.keys(v).sort((a,b)=>Number(a)-Number(b));
+          arr=keys.map(k=>v[k]);
+        }
+        const filtered=arr.filter(x=>x&&typeof x==='object'&&x.id);
+        if(filtered.length>0){
+          secs=filtered;
+        }else if(!_saving){
+          secs=JSON.parse(JSON.stringify(DEF));
+        }
+      }
+      render();
+      SS('☁️ متزامن','rgba(255,255,255,.9)');
+    },()=>{
+      if(!secs.length)secs=JSON.parse(JSON.stringify(DEF));
+      render();
+      SS('⚠️ بدون اتصال','#f48fb1');
+    });
+    unC=onValue(cR,s=>{chk=s.val()||{};syncC();updP();});
+    unH=onValue(hR,s=>{hist=s.val()||{};if($('tab-history').style.display!=='none')renderH();});
+    onValue(ref(db,`users/${uid}/mariam/templates`),s=>{tmpls=s.val()||{};updateTB();});
+    onValue(ref(db,`users/${uid}/mariam/currentTemplate`),s=>{const v=s.val();if(v){tId=v.id;tName=v.name;updateTB();}});
+    onValue(ref(db,`users/${uid}/mariam/notifications`),s=>{notifs=s.val()||{};renderN();});
+    onValue(ref(db,`users/${uid}/mariam/followers`),s=>{followers=s.val()||{};if(isAdmin){renderFollowers();updateFollowerDropdowns();}});
+    // Listen to watcher (admin watching this user)
+    onValue(ref(db,`users/${uid}/mariam/watcher`),s=>{
+      myWatcher=s.val()||null;
+      updateWatcherDisplay();
+    });
+    if(isAdmin) loadAllUsers();
+
+    // Load shared templates (built-in مفصّل always available)
+    onValue(ref(db,'shared/templates'),snap=>{
+      const shared=snap.val()||{};
+      Object.entries(shared).forEach(([id,t])=>{if(!tmpls[id])tmpls[id]={...t,sharedOnly:true};});
+    });
+
+    // Handle admin invitation via pendingRole
+    onValue(ref(db,`users/${uid}/mariam/pendingRole`),s=>{
+      const v=s.val();
+      if(v==='admin'&&!isAdmin){
+        // Show in notification bell instead of confirm popup
+        const nKey=`admin_invite_${Date.now()}`;
+        if(!notifs[nKey]){
+          set(ref(db,`users/${uid}/mariam/notifications/admin_invite`),{
+            message:'👑 تمت دعوتك لتكون مشرفاً في الورد اليومي',
+            time:Date.now(),read:false,type:'adminInvite'
+          });
+        }
+      }
+    });
+  }else{
+    uid=null;
+    $('login-screen').style.display='flex';
+    $('user-bar').style.display='none';
+    $('tabs-bar').style.display='none';
+    $('app').style.display='none';
+    if(unS){unS();unS=null} if(unC){unC();unC=null} if(unH){unH();unH=null}
+  }
+});
+
+// ── Tabs ────────────────────────────────────────────
+window.showTab=(tab,btn)=>{
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  ['ward','history','perf','admin'].forEach(t=>$('tab-'+t).style.display=t===tab?'block':'none');
+  if(tab==='history'){updateFollowerDropdowns();renderH();}
+  if(tab==='perf'){updateFollowerDropdowns();renderP();}
+  if(tab==='admin'){loadAllUsers();renderFollowers();renderBcList();}
+};
+
+// ── Render ward ─────────────────────────────────────
+function render(){
+  const g=$('grid');g.innerHTML='';
+  const vis=editMode?secs:secs.filter(s=>!s.hidden);
+  vis.forEach(sec=>{
+    const vi=editMode?sec.items:sec.items.filter(i=>!i.hidden);
+    const dC=vi.filter(i=>!i.hidden&&chk[`${sec.id}_${i.id}`]).length;
+    const vC=vi.filter(i=>!i.hidden).length;
+    const pct=vC?Math.round(dC/vC*100):0;
+    const c=document.createElement('div');
+    c.className='card'+(sec.hidden?' hid':'');
+    c.innerHTML=`<div class="ch" style="background:${sec.hidden?'#ccc':sec.color}">
+      <span class="ci">${sec.icon}</span><div class="ct">${sec.title}</div>
+      <div class="cc">${dC}/${vC}</div>
+      <div class="cebtns">
+        <button class="ebtn" style="background:${sec.hidden?'#81c784':'#ffb74d'}" onclick="togS('${sec.id}')">${sec.hidden?'إظهار':'إخفاء'}</button>
+        <button class="ebtn" style="background:#ef5350" onclick="delS('${sec.id}')">🗑</button>
+      </div></div>
+      <div class="cp"><div class="cpf" style="width:${pct}%;background:${sec.color}"></div></div>
+      <div>${vi.map(it=>{const k=`${sec.id}_${it.id}`,dn=!!chk[k];
+        return`<div class="item${dn?' done':''}${it.hidden?' hitm':''}" data-sid="${sec.id}" data-iid="${it.id}" onclick="togI('${sec.id}','${it.id}')">
+          <div class="chk" style="${dn?`border-color:${sec.color};background:${sec.color}`:''}">${dn?'✓':''}</div>
+          <div class="itxt${it.text.startsWith('📿')?' bold':''}">${it.hidden&&editMode?`(مخفي) ${it.text}`:it.text}</div>
+          <div class="iebtns">
+            <button class="ebtn" style="background:${it.hidden?'#81c784':'#ffb74d'}" onclick="event.stopPropagation();togIH('${sec.id}','${it.id}')">${it.hidden?'👁':'🙈'}</button>
+            <button class="ebtn" style="background:#ef5350" onclick="event.stopPropagation();delI('${sec.id}','${it.id}')">🗑</button>
+          </div></div>`}).join('')}
+      <div class="air"><input id="ai-${sec.id}" placeholder="بند جديد..." onkeydown="if(event.key==='Enter')addI('${sec.id}')">
+        <button class="ebtn" style="background:#e91e8c;padding:4px 10px" onclick="addI('${sec.id}')">+</button></div></div>`;
+    g.appendChild(c);
+  });updP();
+}
+
+function syncC(){
+  document.querySelectorAll('.item').forEach(el=>{
+    const sid=el.dataset.sid,iid=el.dataset.iid;if(!sid||!iid)return;
+    const k=`${sid}_${iid}`,dn=!!chk[k];
+    const sec=secs.find(s=>s.id===sid);const col=sec?sec.color:'#e91e8c';
+    el.classList.toggle('done',dn);
+    const c=el.querySelector('.chk');
+    if(c){c.style.borderColor=dn?col:'#ddd';c.style.background=dn?col:'white';c.textContent=dn?'✓':'';}
+  });
+}
+
+function updP(){
+  const tot=secs.reduce((a,s)=>a+s.items.filter(i=>!i.hidden).length,0);
+  const dn=secs.reduce((a,s)=>a+s.items.filter(i=>!i.hidden&&chk[`${s.id}_${i.id}`]).length,0);
+  const p=tot?Math.round(dn/tot*100):0;
+  $('pd').textContent=dn;$('pt').textContent=tot;$('pp').textContent=p+'%';$('pb').style.width=p+'%';
+  document.title=`الورد (${dn}/${tot})`;
+}
+
+function saveSecs(){
+  SS('⏳ جاري الحفظ...','#ffcc80');
+  _saving=true;
+  const cl=secs.filter(Boolean).map(s=>({...s,items:(s.items||[]).filter(Boolean)}));
+  set(ref(db,`users/${uid}/mariam/sections`),cl)
+    .then(()=>{
+      SS('☁️ تم الحفظ','rgba(255,255,255,.9)');
+      setTimeout(()=>{_saving=false;},1000); // keep flag for 1s after save
+    })
+    .catch(()=>{_saving=false;SS('❌ فشل','#ef9a9a');});
+}
+
+// ── Ward ops ────────────────────────────────────────
+window.togI=(sid,iid)=>{
+  if(editMode)return;
+  const k=`${sid}_${iid}`,nv=!chk[k];chk[k]=nv;
+  const el=document.querySelector(`.item[data-sid="${sid}"][data-iid="${iid}"]`);
+  const sec=secs.find(s=>s.id===sid);const col=sec?sec.color:'#e91e8c';
+  if(el){el.classList.toggle('done',nv);const c=el.querySelector('.chk');if(c){c.style.borderColor=nv?col:'#ddd';c.style.background=nv?col:'white';c.textContent=nv?'✓':'';}}
+  updP();SS('⏳','#ffcc80');
+  update(ref(db,`users/${uid}/mariam/checked`),{[k]:nv}).then(()=>SS('☁️ تم الحفظ','rgba(255,255,255,.9)')).catch(()=>SS('❌ فشل','#ef9a9a'));
+};
+window.toggleEdit=()=>{editMode=!editMode;document.body.classList.toggle('edit',editMode);$('sbtn').textContent=editMode?'✕':'⚙️';$('sbtn').classList.toggle('active',editMode);render();};
+window.togS=sid=>{secs=secs.map(s=>s.id===sid?{...s,hidden:!s.hidden}:s);saveSecs();render();};
+window.delS=sid=>{if(!confirm('حذف الكارت نهائياً؟'))return;secs=secs.filter(s=>s.id!==sid);saveSecs();render();};
+window.addSec=()=>{const t=$('ntitle').value.trim(),ic=$('nic').value;if(!t)return;sc++;secs.unshift({id:`s${sc}`,icon:ic,color:PASTELS[secs.length%PASTELS.length],title:t,hidden:false,items:[]});$('ntitle').value='';saveSecs();render();};
+window.togIH=(sid,iid)=>{secs=secs.map(s=>s.id!==sid?s:{...s,items:s.items.map(i=>i.id===iid?{...i,hidden:!i.hidden}:i)});saveSecs();render();};
+window.delI=(sid,iid)=>{secs=secs.map(s=>s.id!==sid?s:{...s,items:s.items.filter(i=>i.id!==iid)});saveSecs();render();};
+window.addI=sid=>{
+  const inp=$(`ai-${sid}`),t=(inp?inp.value:'').trim();if(!t)return;
+  ic++;
+  secs=secs.map(s=>s.id!==sid?s:{...s,items:[...s.items,{id:`i${ic}`,text:t,hidden:false}]});
+  if(inp)inp.value='';
+  saveSecs();
+  render();
+};
+
+// ── New Day ──────────────────────────────────────────
+window.startNewDay=()=>{
+  const k=TK(),already=!!hist[k];
+  const tot=secs.reduce((a,s)=>a+s.items.filter(i=>!i.hidden).length,0);
+  const dn=secs.reduce((a,s)=>a+s.items.filter(i=>!i.hidden&&chk[`${s.id}_${i.id}`]).length,0);
+  const p=tot?Math.round(dn/tot*100):0;
+  const msg=already
+    ?`⚠️ بدأت يوماً جديداً اليوم بالفعل (${FD(k)}).\n\nإنجازك: ${dn}/${tot} (${p}%)\n\nهل تريد تحديث السجل ومسح العلامات؟`
+    :`🌅 ابدأ يوم جديد؟\n\nسيُحفظ ${FD(k)} بإنجاز ${dn}/${tot} (${p}%) ثم تُمسح العلامات.`;
+  if(!confirm(msg))return;
+  const snap={date:k,pct:p,done:dn,total:tot,sections:secs.filter(s=>!s.hidden).map(s=>({id:s.id,icon:s.icon,color:s.color,title:s.title,items:s.items.filter(i=>!i.hidden).map(i=>({id:i.id,text:i.text,done:!!chk[`${s.id}_${i.id}`]}))}))};
+  SS('⏳','#ffcc80');
+  set(ref(db,`users/${uid}/mariam/history/${k}`),snap).then(()=>set(ref(db,`users/${uid}/mariam/checked`),{})).then(()=>{chk={};syncC();updP();SS('✅ تم','rgba(255,255,255,.9)');}).catch(()=>SS('❌ فشل','#ef9a9a'));
+};
+
+// ── Template ─────────────────────────────────────────
+function updateTB(){
+  const n=tId==='default'?'جدول عشر ذي الحجة':tId==='mufassal'?'الورد اليومي المفصّل':(tmpls[tId]?.name||tId);
+  $('tnbadge').textContent=n;$('htname').textContent=n;
+}
+window.openT=m=>{
+  const mo=$('tmodal');mo.classList.add('open');
+  const ti=$('tmtitle'),tb=$('tmbody');
+  if(m==='saveas'){ti.textContent='💾 حفظ كـ Template جديد';tb.innerHTML=`<div class="tinput"><input id="tni" placeholder="اسم الـ Template..."><button class="tbtn" onclick="saveAsT()">حفظ</button></div>`;}
+  else if(m==='save'){const n=tId==='default'?'الورد الافتراضي':(tmpls[tId]?.name||'—');ti.textContent='💾 حفظ';tb.innerHTML=`<p style="font-size:13px;color:#333;margin-bottom:14px">تحديث <b style="color:#e91e8c">${n}</b>؟</p><div style="display:flex;gap:8px"><button class="tbtn" onclick="saveCT()" style="flex:1">تأكيد</button><button class="tbtn s" onclick="closeT()" style="flex:1">إلغاء</button></div>`;}
+  else if(m==='pick'){
+    ti.textContent='🎨 اختر Template';
+    const def=`<div class="tirow"><div style="flex:1"><div class="tiname">🌙 جدول عشر ذي الحجة</div><div class="timeta">الجدول الافتراضي</div></div><button class="tbtn${tId==='default'?' s':''}" onclick="applyT('default','جدول عشر ذي الحجة')">${tId==='default'?'الحالي':'تطبيق'}</button></div>
+<div class="tirow"><div style="flex:1"><div class="tiname">🕋 الورد اليومي المفصّل</div><div class="timeta">الجدول الأساسي الكامل</div></div><button class="tbtn${tId==='mufassal'?' s':''}" onclick="applyT('mufassal','الورد اليومي المفصّل')">${tId==='mufassal'?'الحالي':'تطبيق'}</button></div>`;
+    const items=Object.entries(tmpls).map(([id,t])=>`<div class="tirow"><div style="flex:1"><div class="tiname">${t.name}</div><div class="timeta">${(t.sections||[]).length} كارت${t.broadcast?' · 📢 مشترك':''}${t.shared?' · 🌐 مشترك للكل':''}</div></div><div style="display:flex;gap:4px"><button class="tbtn${tId===id?' s':''}" onclick="applyT('${id}','${t.name}')">${tId===id?'الحالي':'تطبيق'}</button>${!t.broadcast&&!t.shared?`<button class="tbtn" style="background:#ef5350" onclick="delT('${id}')">🗑</button>`:''}</div></div>`).join('');
+    tb.innerHTML=def+items+(Object.keys(tmpls).length?'':'<p style="text-align:center;color:#ccc;font-size:12px;padding:16px">لا يوجد templates بعد</p>');
+  }
+};
+window.closeT=()=>$('tmodal').classList.remove('open');
+window.saveCT=()=>{if(tId==='default'){saveSecs();closeT();return;}const t={...tmpls[tId],sections:JSON.parse(JSON.stringify(secs)),savedAt:Date.now()};set(ref(db,`users/${uid}/mariam/templates/${tId}`),t).then(()=>{tmpls[tId]=t;updateTB();closeT();SS('✅ تم','rgba(255,255,255,.9)');});};
+window.saveAsT=()=>{const n=($('tni')?.value||'').trim();if(!n)return;const id=`t${Date.now()}`,t={name:n,sections:JSON.parse(JSON.stringify(secs)),savedAt:Date.now()};set(ref(db,`users/${uid}/mariam/templates/${id}`),t).then(()=>{tmpls[id]=t;tId=id;tName=n;updateTB();closeT();SS('✅ تم','rgba(255,255,255,.9)');});};
+window.applyT=(id,name)=>{
+  const dn=secs.reduce((a,s)=>a+s.items.filter(i=>!i.hidden&&chk[`${s.id}_${i.id}`]).length,0);
+  if(!confirm(dn>0?`⚠️ عندك ${dn} بند منجز.\n\nتطبيق "${name}" سيمسح العلامات. متابع؟`:`تطبيق "${name}"؟`)){closeT();return;}
+  secs=JSON.parse(JSON.stringify(id==='default'?DEF:id==='mufassal'?DEF_MUFASSAL:(tmpls[id]?.sections||DEF)));
+  tId=id;tName=name;chk={};
+  saveSecs();set(ref(db,`users/${uid}/mariam/checked`),{});set(ref(db,`users/${uid}/mariam/currentTemplate`),{id,name});
+  updateTB();syncC();updP();render();closeT();
+};
+window.delT=id=>{if(!confirm('حذف؟'))return;set(ref(db,`users/${uid}/mariam/templates/${id}`),null).then(()=>{delete tmpls[id];if(tId===id){tId='default';updateTB();}openT('pick');});};
+
+// ── Follower dropdowns (admin only) ──────────────────
+let viewingHistUid = 'self';
+let viewingPerfUid = 'self';
+let followerHist = {}; // cached history of viewed follower
+
+function updateFollowerDropdowns(){
+  if(!isAdmin) return;
+  const fls = Object.entries(followers);
+  const adminName = auth.currentUser?.displayName || 'أنا';
+  const opts = `<option value="self">👤 ${adminName} (أنا)</option>` +
+  fls.map(([fuid,f])=>{
+    const name=allUsers[fuid]?.profile?.name||f.name||f.email||fuid;
+    return`<option value="${fuid}">👁 ${name}</option>`;
+  }).join('');
+  const hs = document.getElementById('hist-follower-sel');
+  const ps = document.getElementById('perf-follower-sel');
+  if(hs){ hs.innerHTML = opts; hs.value = viewingHistUid; }
+  if(ps){ ps.innerHTML = opts; ps.value = viewingPerfUid; }
+  const show = fls.length > 0;
+  document.getElementById('hist-follower-bar').style.display = show ? 'block' : 'none';
+  document.getElementById('perf-follower-bar').style.display = show ? 'block' : 'none';
+}
+
+window.switchHistUser = fuid => {
+  viewingHistUid = fuid;
+  if(fuid === 'self'){
+    followerHist = null;
+    renderH();
+  } else {
+    get(ref(db,`users/${fuid}/mariam/history`)).then(snap=>{
+      followerHist = snap.val() || {};
+      renderHWithData(followerHist);
+    });
+  }
+};
+
+window.switchPerfUser = fuid => {
+  viewingPerfUid = fuid;
+  if(fuid === 'self'){
+    followerHist = null;
+    renderP();
+  } else {
+    // Load both history AND sections of the follower
+    Promise.all([
+      get(ref(db,`users/${fuid}/mariam/history`)),
+      get(ref(db,`users/${fuid}/mariam/sections`))
+    ]).then(([histSnap, secsSnap]) => {
+      followerHist = histSnap.val() || {};
+      let followerSecs = secsSnap.val();
+      if(followerSecs && typeof followerSecs === 'object'){
+        followerSecs = Array.isArray(followerSecs) ? followerSecs : Object.values(followerSecs);
+        followerSecs = followerSecs.filter(s=>s&&s.id);
+      }
+      if(!followerSecs || !followerSecs.length) followerSecs = secs;
+      renderPWithData(followerHist, followerSecs);
+    });
+  }
+};
+window.setHP=(p,btn)=>{hPer=p;document.querySelectorAll('#tab-history .pbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderH();};
+function getFK(data){const d=data||hist;const ks=Object.keys(d).sort().reverse();if(!hPer)return ks;const c=new Date();c.setDate(c.getDate()-hPer);return ks.filter(k=>k>=c.toISOString().slice(0,10));}
+
+function renderH(){const data=viewingHistUid==='self'?hist:(followerHist||hist);renderChart(data);renderCal(data);renderHL(data);}
+function renderHWithData(data){renderChart(data);renderCal(data);renderHL(data);}
+function renderP(){const data=viewingPerfUid==='self'?hist:(followerHist||{});renderPWithData(data,secs);}
+
+function renderChart(data){const hist=data||window._hist||{};
+  const cv=$('hchart');if(!cv)return;
+  const ctx=cv.getContext('2d');
+  const ks=getFK(data).reverse();
+  const W=cv.offsetWidth||300,H=160;
+  cv.width=W*devicePixelRatio;cv.height=H*devicePixelRatio;
+  cv.style.width=W+'px';cv.style.height=H+'px';
+  ctx.scale(devicePixelRatio,devicePixelRatio);ctx.clearRect(0,0,W,H);
+  if(!ks.length){ctx.fillStyle='#ccc';ctx.font='12px Tajawal';ctx.textAlign='center';ctx.fillText('لا يوجد سجل بعد',W/2,H/2);return;}
+  const pad={t:10,r:10,b:30,l:30},cW=W-pad.l-pad.r,cH=H-pad.t-pad.b;
+  ctx.strokeStyle='#f0e0f0';ctx.lineWidth=1;
+  [0,25,50,75,100].forEach(v=>{const y=pad.t+cH*(1-v/100);ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(pad.l+cW,y);ctx.stroke();ctx.fillStyle='#bbb';ctx.font='9px Tajawal';ctx.textAlign='right';ctx.fillText(v+'%',pad.l-3,y+3);});
+  const pts=ks.map((k,i)=>({x:pad.l+(ks.length>1?i/(ks.length-1)*cW:cW/2),y:pad.t+cH*(1-(hist[k].pct||0)/100),pct:hist[k].pct||0}));
+  ctx.beginPath();ctx.moveTo(pts[0].x,pad.t+cH);pts.forEach(p=>ctx.lineTo(p.x,p.y));ctx.lineTo(pts[pts.length-1].x,pad.t+cH);ctx.closePath();
+  const gr=ctx.createLinearGradient(0,pad.t,0,pad.t+cH);gr.addColorStop(0,'rgba(233,30,140,.2)');gr.addColorStop(1,'rgba(233,30,140,0)');ctx.fillStyle=gr;ctx.fill();
+  ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.strokeStyle='#e91e8c';ctx.lineWidth=2;ctx.stroke();
+  pts.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,4,0,Math.PI*2);ctx.fillStyle=p.pct>=80?'#4caf50':p.pct>=50?'#ff9800':'#e91e8c';ctx.fill();ctx.strokeStyle='white';ctx.lineWidth=1.5;ctx.stroke();});
+  const st=Math.max(1,Math.floor(ks.length/4));ctx.fillStyle='#aaa';ctx.font='8px Tajawal';ctx.textAlign='center';
+  pts.forEach((p,i)=>{if(i%st===0||i===pts.length-1){const d=new Date(ks[i]);ctx.fillText(`${d.getDate()}/${d.getMonth()+1}`,p.x,H-pad.b+14);}});
+}
+
+function renderCal(data){const hist=data||window._hist||{};
+  const now=new Date();if(calY===undefined){calY=now.getFullYear();calM=now.getMonth();}
+  $('calmth').textContent=`${MONTHS[calM]} ${calY}`;
+  $('calnames').innerHTML=DAYS.map(d=>`<div class="caldn">${d}</div>`).join('');
+  const g=$('calgrid');g.innerHTML='';
+  const first=new Date(calY,calM,1).getDay(),days=new Date(calY,calM+1,0).getDate();
+  const tod=now.toISOString().slice(0,10);
+  for(let i=0;i<first;i++)g.innerHTML+=`<div class="cald emp"></div>`;
+  for(let d=1;d<=days;d++){
+    const k=`${calY}-${String(calM+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const has=!!hist[k],isTod=k===tod;
+    g.innerHTML+=`<div class="cald${has?' hd2':''}${isTod?' tod':''}" onclick="openDay('${k}')" title="${has?(hist[k].pct||0)+'%':''}">${d}</div>`;
+  }
+}
+window.calN=dir=>{calM+=dir;if(calM>11){calM=0;calY++;}if(calM<0){calM=11;calY--;}renderCal();};
+
+function renderHL(data){const hist=data||window._hist||{};
+  const ks=getFK(data),el=$('hlist');
+  if(!ks.length){el.innerHTML='<div style="text-align:center;color:#ccc;padding:30px;font-size:13px">لا يوجد سجل في هذه الفترة</div>';return;}
+  el.innerHTML=ks.map(k=>{
+    const d=hist[k],p=d.pct||0,cls=p>=80?'g':p>=50?'m':'l';
+    return`<div class="hcard"><div class="hhdr" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('span').style.transform=this.nextElementSibling.classList.contains('open')?'rotate(180deg)':''">
+      <div class="hdate">${FD(k)}</div><div class="hpct ${cls}">${p}% — ${d.done||0}/${d.total||0}</div><span style="font-size:12px;color:#aaa;transition:transform .2s">▼</span></div>
+      <div class="hbody">${(d.sections||[]).map(s=>`<div style="margin-bottom:10px"><div style="font-family:'Amiri',serif;font-size:12px;color:${s.color||'#e91e8c'};font-weight:700;margin-bottom:4px">${s.icon||''} ${s.title}</div>${(s.items||[]).map(it=>`<div style="display:flex;align-items:center;gap:6px;padding:3px 0"><div style="width:14px;height:14px;border-radius:4px;background:${it.done?s.color||'#e91e8c':'#eee'};display:flex;align-items:center;justify-content:center;flex-shrink:0">${it.done?'<span style="color:white;font-size:9px;font-weight:900">✓</span>':''}</div><span style="font-size:11px;color:${it.done?'#aaa':'#444'};text-decoration:${it.done?'line-through':'none'}">${it.text}</span></div>`).join('')}</div>`).join('')}
+      <div style="text-align:center;padding:8px"><button onclick="openDay('${k}')" style="background:#fce4ec;color:#e91e8c;border:none;border-radius:20px;padding:5px 16px;font-size:11px;cursor:pointer;font-family:'Tajawal',sans-serif">فتح للتعديل</button></div></div></div>`;
+  }).join('');
+}
+
+window.openDay=k=>{
+  if(!hist[k])return;dKey=k;dEdit=false;$('dedit').checked=false;
+  $('dmtitle').textContent=FD(k);renderDC(false);$('dmodal').classList.add('open');
+};
+window.closeD=()=>{$('dmodal').classList.remove('open');dKey=null;};
+window.toggleDE=v=>{dEdit=v;renderDC(v);};
+function renderDC(ed){
+  const d=hist[dKey],el=$('dmcontent');if(!d){el.innerHTML='';return;}
+  el.innerHTML=(d.sections||[]).map(s=>`<div style="background:white;border-radius:12px;overflow:hidden;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.07)"><div style="background:${s.color||'#f48fb1'};padding:9px 12px;display:flex;align-items:center;gap:8px"><span style="font-size:16px">${s.icon||''}</span><span style="font-family:'Amiri',serif;font-size:12px;color:white;font-weight:700;flex:1">${s.title}</span></div>${(s.items||[]).map(it=>`<div onclick="${ed?`togHI('${dKey}','${s.id}','${it.id}')`:''}" style="display:flex;align-items:flex-start;gap:8px;padding:7px 12px;border-bottom:1px solid rgba(0,0,0,.04);cursor:${ed?'pointer':'default'}"><div style="width:17px;height:17px;border-radius:5px;border:2px solid ${it.done?s.color||'#e91e8c':'#ddd'};background:${it.done?s.color||'#e91e8c':'white'};flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center">${it.done?'<span style="color:white;font-size:9px;font-weight:900">✓</span>':''}</div><span style="font-size:12px;color:${it.done?'#bbb':'#333'};text-decoration:${it.done?'line-through':'none'};line-height:1.5">${it.text}</span></div>`).join('')}</div>`).join('');
+}
+window.togHI=(dk,sid,iid)=>{
+  if(!dEdit||!hist[dk])return;
+  const d=JSON.parse(JSON.stringify(hist[dk]));
+  d.sections=d.sections.map(s=>s.id!==sid?s:{...s,items:s.items.map(i=>i.id!==iid?i:{...i,done:!i.done})});
+  const tot=d.sections.reduce((a,s)=>a+s.items.length,0),dn=d.sections.reduce((a,s)=>a+s.items.filter(i=>i.done).length,0);
+  d.done=dn;d.total=tot;d.pct=tot?Math.round(dn/tot*100):0;
+  hist[dk]=d;set(ref(db,`users/${uid}/mariam/history/${dk}`),d);renderDC(true);renderH();
+};
+
+// ── Performance ───────────────────────────────────────
+window.setPP=(p,btn)=>{pPer=p;document.querySelectorAll('#tab-perf .pbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderP();};
+function renderPWithData(data,secsList){
+  const el=$('pcontent');
+  const ks=Object.keys(data).sort();
+  const fl=pPer===0?ks:(()=>{const c=new Date();c.setDate(c.getDate()-pPer);return ks.filter(k=>k>=c.toISOString().slice(0,10));})();
+  if(!fl.length){el.innerHTML='<div style="text-align:center;color:#ccc;padding:40px;font-size:13px">لا يوجد سجل في هذه الفترة</div>';return;}
+  const pm={};
+  fl.forEach(dk=>{const d=data[dk];if(!d||!d.sections)return;d.sections.forEach(s=>{(s.items||[]).forEach(it=>{const k=`${s.id}_${it.id}`;if(!pm[k])pm[k]={text:it.text,sId:s.id,sTitle:s.title,sIcon:s.icon||'',sCol:s.color||'#f48fb1',n:0,tot:0};pm[k].tot++;if(it.done)pm[k].n++;});});});
+  const gr={};
+  (secsList||secs).filter(s=>!s.hidden).forEach(s=>{gr[s.id]={icon:s.icon,color:s.color,title:s.title,items:[],other:false};});
+  Object.entries(pm).forEach(([k,it])=>{if(gr[it.sId])gr[it.sId].items.push({...it,k});else{const gk=`_${it.sId}`;if(!gr[gk])gr[gk]={icon:it.sIcon,color:'#bbb',title:`${it.sTitle} (سابق)`,items:[],other:true};gr[gk].items.push({...it,k});}});
+  Object.values(gr).forEach(g=>g.items.sort((a,b)=>(b.n/Math.max(b.tot,1))-(a.n/Math.max(a.tot,1))));
+  el.innerHTML=Object.entries(gr).map(([,g])=>{
+    if(!g.items.length)return'';
+    const avg=Math.round(g.items.reduce((a,i)=>a+(i.n/Math.max(i.tot,1)),0)/g.items.length*100);
+    return`<div class="psec"><div class="pshdr" style="background:${g.color}"><span>${g.icon}</span><div class="psttl">${g.title}</div><div class="psavg">${avg}%</div></div>${g.items.map(it=>{const p=Math.round(it.n/Math.max(it.tot,1)*100),c=p>=80?'#4caf50':p>=50?'#ff9800':'#f48fb1';return`<div class="pitm"><div class="ptxt">${it.text}</div><div class="pbar"><div class="pbtrack"><div class="pbfill" style="width:${p}%;background:${c}"></div></div><div class="ppct" style="color:${c}">${p}% · ${it.n}/${it.tot}</div></div></div>`;}).join('')}${g.other?'<div style="font-size:11px;color:#aaa;padding:8px 14px;font-style:italic;background:white;border-top:1px dashed #eee">📌 بنود من templates سابقة</div>':''}</div>`;
+  }).join('');
+}
+
+// ── Notifications ─────────────────────────────────────
+function renderN(){
+  const ks=Object.keys(notifs).sort().reverse();
+  const unr=ks.filter(k=>!notifs[k].read);
+  const b=$('nbadge'),l=$('nlist');
+  b.style.display=unr.length?'flex':'none';b.textContent=unr.length>9?'9+':String(unr.length);
+  if(!ks.length){l.innerHTML='<div class="nempty">لا يوجد إشعارات</div>';return;}
+  l.innerHTML=ks.map(k=>{
+    const n=notifs[k];
+    const isWR=n.type==='watchRequest'&&n.fromUid;
+    const isAI=n.type==='adminInvite';
+    const actions=isWR?`<div style="display:flex;gap:6px;margin-top:6px">
+      <button onclick="event.stopPropagation();acceptWatch('${k}','${n.fromUid}','${n.fromName||''}')" style="flex:1;background:#4caf50;color:white;border:none;border-radius:8px;padding:4px 8px;font-size:11px;cursor:pointer;font-family:'Tajawal',sans-serif">✅ قبول</button>
+      <button onclick="event.stopPropagation();rejectWatch('${k}','${n.fromUid}')" style="flex:1;background:#ef5350;color:white;border:none;border-radius:8px;padding:4px 8px;font-size:11px;cursor:pointer;font-family:'Tajawal',sans-serif">❌ رفض</button>
+    </div>`:isAI?`<div style="display:flex;gap:6px;margin-top:6px">
+      <button onclick="event.stopPropagation();acceptAdminInvite('${k}')" style="flex:1;background:#9c27b0;color:white;border:none;border-radius:8px;padding:4px 8px;font-size:11px;cursor:pointer;font-family:'Tajawal',sans-serif">✅ قبول</button>
+      <button onclick="event.stopPropagation();delN('${k}')" style="flex:1;background:#ef5350;color:white;border:none;border-radius:8px;padding:4px 8px;font-size:11px;cursor:pointer;font-family:'Tajawal',sans-serif">❌ رفض</button>
+    </div>`:'';
+    return`<div class="nitem" onclick="markN('${k}')">
+      <div class="ndot" style="opacity:${n.read?0:1}"></div>
+      <div style="flex:1">
+        <div class="ntxt">${n.message}</div>
+        <div class="ntime">${FA(n.time)}</div>
+        ${actions}
+      </div>
+      ${!isWR&&!isAI?`<button onclick="event.stopPropagation();delN('${k}')" style="background:none;border:none;color:#ddd;cursor:pointer;font-size:14px">✕</button>`:''}
+    </div>`;
+  }).join('');
+}
+window.toggleN=()=>{const d=$('ndd');d.style.display=d.style.display==='block'?'none':'block';};
+document.addEventListener('click',e=>{if(!e.target.closest('.nw')){const d=$('ndd');if(d)d.style.display='none';}});
+window.markN=k=>set(ref(db,`users/${uid}/mariam/notifications/${k}/read`),true);
+window.delN=k=>set(ref(db,`users/${uid}/mariam/notifications/${k}`),null);
+
+window.acceptAdminInvite=k=>{
+  set(ref(db,`users/${uid}/mariam/profile/role`),'admin');
+  set(ref(db,`users/${uid}/mariam/pendingRole`),null);
+  set(ref(db,`users/${uid}/mariam/notifications/${k}`),{message:'👑 أصبحت مشرفاً الآن',time:Date.now(),read:true});
+  isAdmin=true;
+  $('abadge').style.display='inline-block';
+  $('admin-tab-btn').style.display='block';
+};
+
+window.acceptWatch=(notifKey,fromUid,fromName)=>{
+  const curUser=auth.currentUser;
+  // Mark request as accepted
+  set(ref(db,`users/${uid}/mariam/watchRequests/${fromUid}/status`),'accepted');
+  // Add this user to admin's followers list
+  set(ref(db,`users/${fromUid}/mariam/followers/${uid}`),{
+    name:curUser.displayName,email:curUser.email,avatar:curUser.photoURL||'',uid
+  });
+  // Save watcher info on user's own profile (so it shows in users list & header)
+  set(ref(db,`users/${uid}/mariam/watcher`),{
+    uid:fromUid,name:fromName,
+    acceptedAt:Date.now()
+  });
+  // Delete notification from bell
+  set(ref(db,`users/${uid}/mariam/notifications/${notifKey}`),null);
+  // Notify admin
+  sendNotif(fromUid,`✅ قَبِل "${curUser.displayName}" طلب المتابعة`);
+};
+
+window.rejectWatch=(notifKey,fromUid)=>{
+  set(ref(db,`users/${uid}/mariam/watchRequests/${fromUid}/status`),'rejected');
+  set(ref(db,`users/${uid}/mariam/notifications/${notifKey}`),{
+    message:'❌ تم رفض طلب المتابعة',time:Date.now(),read:true
+  });
+};
+function sendNotif(toUid,msg){set(ref(db,`users/${toUid}/mariam/notifications/n${Date.now()}`),{message:msg,time:Date.now(),read:false});}
+window.sendNotif=sendNotif;
+
+// ── Watcher display ────────────────────────────────────
+function updateWatcherDisplay(){
+  // Show watcher name under header title for non-admin users
+  let el=document.getElementById('watcher-subtitle');
+  if(!el){
+    el=document.createElement('div');
+    el.id='watcher-subtitle';
+    el.style.cssText='font-size:11px;color:rgba(255,255,255,.7);margin-top:2px;margin-bottom:6px';
+    const tmplEl=$('htname');
+    if(tmplEl && tmplEl.parentNode) tmplEl.parentNode.insertBefore(el, tmplEl.nextSibling);
+  }
+  el.textContent = myWatcher ? `👁 يتابعك: ${myWatcher.name}` : '';
+}
+
+// ── Admin ─────────────────────────────────────────────
+let allUsers={};
+function loadAllUsers(){
+  onValue(ref(db,'users'),snap=>{
+    const raw=snap.val()||{};
+    allUsers={};
+    Object.entries(raw).forEach(([id,u])=>{
+      allUsers[id]={
+        profile: u.mariam?.profile || u.profile || {},
+        mariam: u.mariam||{}
+      };
+    });
+    renderUsers();
+  });
+}
+
+function renderUsers(){
+  const el=$('users-list');if(!el)return;
+  const users=Object.entries(allUsers).filter(([id])=>id!==uid);
+  if(!users.length){el.innerHTML='<div class="nempty">لا يوجد مستخدمون آخرون بعد</div>';return;}
+  el.innerHTML=users.map(([id,u])=>{
+    const p=u.profile||{};
+    const role=p.role||'user';
+    const isAdminUser=ADMIN_EMAILS.includes(p.email)||role==='admin';
+    const watcher=u.mariam?.watcher;
+    const isWatchedByMe=watcher&&watcher.uid===uid;
+    const watchedByName=watcher&&watcher.uid!==uid?watcher.name:null;
+    return`<div class="urow">
+      <div class="uavatar">${p.avatar?`<img src="${p.avatar}" width="36" height="36" style="border-radius:50%">`:'👤'}</div>
+      <div class="uinfo">
+        <div class="uname2">${p.name||'—'} ${isAdminUser?`<span style="background:linear-gradient(135deg,#e91e8c,#9c27b0);color:white;border-radius:20px;padding:1px 7px;font-size:9px;font-weight:700;vertical-align:middle">مشرف 👑</span>`:''}</div>
+        <div class="uemail">${p.email||''}</div>
+        ${isWatchedByMe?`<div style="font-size:10px;color:#4caf50;margin-top:2px">👁 تتابعه الآن</div>`:
+          watchedByName?`<div style="font-size:10px;color:#aaa;margin-top:2px">👁 يتابعه: ${watchedByName}</div>`:''}
+      </div>
+      <div class="ubtns">
+        <button class="tbtn${isWatchedByMe?' s':''}" onclick="sendWR('${id}','${p.name||''}')" style="font-size:10px">
+          ${isWatchedByMe?'🔄 تغيير':'👁 تابع'}
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderFollowers(){
+  const el=$('followers-list');if(!el)return;
+  const fl=Object.entries(followers);
+  if(!fl.length){el.innerHTML='<div class="nempty">لا يوجد متابَعون بعد</div>';return;}
+  el.innerHTML=fl.map(([fuid,f])=>{
+    // Get better data from allUsers profile if available
+    const profile=allUsers[fuid]?.profile||{};
+    const name=profile.name||f.name||f.email||'—';
+    const email=profile.email||f.email||'';
+    const avatar=profile.avatar||f.avatar||'';
+    return`<div class="urow">
+      <div class="uavatar">${avatar?`<img src="${avatar}" width="36" style="border-radius:50%">`:'👤'}</div>
+      <div class="uinfo"><div class="uname2">${name}</div><div class="uemail">${email}</div></div>
+      <button class="tbtn" onclick="viewUserReport('${fuid}','${name}')" style="font-size:11px">📊 تقرير</button>
+    </div>`;
+  }).join('');
+}
+
+window.makeAdmin=(toUid,name)=>{
+  if(!confirm(`دعوة "${name}" ليكون مشرفاً؟`))return;
+  set(ref(db,`users/${toUid}/pendingRole`),'admin');
+  sendNotif(toUid,'👑 تمت دعوتك لتكون مشرفاً في الورد اليومي — افتح التطبيق للقبول');
+  alert('تم إرسال الدعوة ✅');
+};
+
+window.sendWR=(toUid,name)=>{
+  if(!confirm(`إرسال طلب متابعة لـ "${name}"؟`))return;
+  const curUser=auth.currentUser;
+  const reqData={adminName:curUser.displayName,adminUid:uid,adminEmail:curUser.email,status:'pending'};
+  set(ref(db,`users/${toUid}/mariam/watchRequests/${uid}`),reqData);
+  // Send notification with action type
+  set(ref(db,`users/${toUid}/mariam/notifications/wr_${uid}`),{
+    message:`👁 المشرف "${curUser.displayName}" يطلب متابعة سجلك`,
+    time:Date.now(),read:false,
+    type:'watchRequest',
+    fromUid:uid,
+    fromName:curUser.displayName
+  });
+  alert('تم إرسال الطلب ✅');
+};
+
+window.inviteAdmin=()=>{
+  const email=$('invEmail').value.trim();if(!email)return;
+  const match=Object.entries(allUsers).find(([,u])=>u.profile?.email===email);
+  if(!match){alert('المستخدم غير موجود');return;}
+  makeAdmin(match[0],match[1].profile?.name||email);
+  $('invEmail').value='';
+};
+
+window.sendWatchReq=()=>{
+  const email=$('watchEmail').value.trim();if(!email)return;
+  const match=Object.entries(allUsers).find(([,u])=>u.profile?.email===email);
+  if(!match){alert('المستخدم غير موجود');return;}
+  sendWR(match[0],match[1].profile?.name||email);
+  $('watchEmail').value='';
+};
+
+let bcSelectedId=null;
+
+function renderBcList(){
+  const el=document.getElementById('bc-tmpl-list');if(!el)return;
+  const list=[
+    {id:'default',name:'🌙 جدول عشر ذي الحجة',sections:DEF},
+    {id:'mufassal',name:'🕋 الورد اليومي المفصّل',sections:DEF_MUFASSAL},
+    ...Object.entries(tmpls).filter(([,t])=>!t.sharedOnly).map(([id,t])=>({id,name:t.name,sections:t.sections}))
+  ];
+  el.innerHTML=list.map(t=>`
+    <div onclick="selBC('${t.id}')" style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:${bcSelectedId===t.id?'#fce4ec':'#fdf6fb'};border-radius:10px;margin-bottom:6px;border:1px solid ${bcSelectedId===t.id?'#f48fb1':'#f8e0ee'};cursor:pointer;transition:all .15s">
+      <div style="flex:1;font-size:13px;color:#333;font-weight:${bcSelectedId===t.id?700:400}">${t.name}</div>
+      ${bcSelectedId===t.id?'<span style="color:#e91e8c;font-size:16px">✓</span>':''}
+    </div>`).join('');
+}
+
+window.selBC=id=>{bcSelectedId=id;renderBcList();};
+
+window.broadcastTmpl=()=>{
+  if(!bcSelectedId){alert('اختر template أولاً');return;}
+  const fls=Object.keys(followers);
+  if(!fls.length){alert('لا يوجد متابَعون بعد');return;}
+  const src=bcSelectedId==='default'?{name:'جدول عشر ذي الحجة',sections:DEF}:bcSelectedId==='mufassal'?{name:'الورد اليومي المفصّل',sections:DEF_MUFASSAL}:(tmpls[bcSelectedId]||{});
+  if(!src.sections){alert('Template غير صالح');return;}
+  if(!confirm(`إرسال "${src.name}" لـ ${fls.length} متابَع؟`))return;
+  const tmplData={name:src.name,sections:JSON.parse(JSON.stringify(src.sections)),savedAt:Date.now(),broadcast:true,fromAdmin:uid};
+  Promise.all(fls.map(fuid=>
+    set(ref(db,`users/${fuid}/mariam/templates/bc_${uid}`),tmplData)
+      .then(()=>sendNotif(fuid,`📢 Template جديد من المشرف: "${src.name}"`))
+  )).then(()=>alert(`تم الإرسال لـ ${fls.length} متابَع ✅`));
+};
+
+// Admin views follower report (read-only)
+window.viewUserReport=(fuid,fname)=>{
+  $('vm-title').textContent=`تقرير ${fname}`;
+  const el=$('vm-content');
+  el.innerHTML='<div style="text-align:center;padding:20px;color:#aaa">جاري التحميل...</div>';
+  $('view-modal').classList.add('open');
+  get(ref(db,`users/${fuid}/history`)).then(snap=>{
+    const h=snap.val()||{};
+    const ks=Object.keys(h).sort().reverse().slice(0,14);
+    if(!ks.length){el.innerHTML='<div style="text-align:center;padding:20px;color:#aaa">لا يوجد سجل بعد</div>';return;}
+    el.innerHTML=ks.map(k=>{const d=h[k],p=d.pct||0,cls=p>=80?'g':p>=50?'m':'l';
+      return`<div class="hcard" style="margin-bottom:10px"><div class="hhdr"><div class="hdate">${FD(k)}</div><div class="hpct ${cls}">${p}% — ${d.done||0}/${d.total||0}</div></div></div>`;}).join('');
+  });
+};
+window.closeVM=()=>$('view-modal').classList.remove('open');
+
+// ── Theme ──────────────────────────────────────────
+let boysMode=localStorage.getItem('themeMode')!=='girls';
+function applyTheme(){
+  const hd=document.querySelector('.hd');
+  const nd=document.getElementById('ndbtn');
+  const pf=document.getElementById('pb');
+  const ls=document.getElementById('login-screen');
+  if(boysMode){
+    document.body.style.background='#f0f7ff';
+    if(hd)hd.style.background='linear-gradient(135deg,#bbdefb,#c5cae9)';
+    if(nd)nd.style.background='linear-gradient(135deg,#1565c0,#283593)';
+    if(pf)pf.style.background='linear-gradient(90deg,#81c784,#1565c0)';
+    if(ls)ls.style.background='linear-gradient(135deg,#bbdefb,#c5cae9)';
+  }else{
+    document.body.style.background='#fdf6fb';
+    if(hd)hd.style.background='linear-gradient(135deg,#f8bbd0,#e1bee7)';
+    if(nd)nd.style.background='linear-gradient(135deg,#e91e8c,#9c27b0)';
+    if(pf)pf.style.background='linear-gradient(90deg,#81c784,#e91e8c)';
+    if(ls)ls.style.background='linear-gradient(135deg,#f8bbd0,#e1bee7)';
+  }
+  const btn=document.getElementById('theme-toggle');
+  if(btn)btn.textContent=boysMode?'🌸 بنات':'🌿 ولاد';
+}
+window.toggleTheme=()=>{boysMode=!boysMode;localStorage.setItem('themeMode',boysMode?'boys':'girls');applyTheme();};
+
+
+applyTheme();
+render();
+</script>
+
+</body>
+</html>
