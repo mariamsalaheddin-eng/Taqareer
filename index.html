@@ -422,27 +422,18 @@ const PASTELS=["#f48fb1","#ce93d8","#ffcc80","#80cbc4","#90caf9","#ef9a9a","#ffe
 const MONTHS=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
 const DAYS=['ح','ن','ث','ر','خ','ج','س'];
 
-// ── جدول عشر ذي الحجة (Default) ─────────────────────
+// ── أعمال العشر (Default) ─────────────────────
 const DEF=[
-  {id:"s1",icon:"🕌",color:"#90caf9",title:"صلاة الجماعة",hidden:false,items:[
-    {id:"i1",text:"صلاة الفجر",hidden:false},
-    {id:"i2",text:"صلاة الظهر",hidden:false},
-    {id:"i3",text:"صلاة العصر",hidden:false},
-    {id:"i4",text:"صلاة المغرب",hidden:false},
-    {id:"i5",text:"صلاة العشاء",hidden:false}]},
-  {id:"s2",icon:"📿",color:"#a5d6a7",title:"الذكر",hidden:false,items:[
-    {id:"i1",text:"سبحان الله والحمد لله ولا إله إلا الله والله أكبر ١٠٠ مرة على الأقل",hidden:false}]},
-  {id:"s3",icon:"🌙",color:"#9fa8da",title:"الصيام",hidden:false,items:[
-    {id:"i1",text:"الصيام لو قدرت — بس يوم عرفة لازم 🌟",hidden:false}]},
-  {id:"s4",icon:"💝",color:"#80cbc4",title:"الصدقة",hidden:false,items:[
-    {id:"i1",text:"أخرج صدقة من مصروفك",hidden:false}]},
-  {id:"s5",icon:"📖",color:"#80deea",title:"القرآن",hidden:false,items:[
-    {id:"i1",text:"اقرأ أو احفظ شيئاً من القرآن",hidden:false}]},
-  {id:"s6",icon:"🌃",color:"#b39ddb",title:"قيام الليل",hidden:false,items:[
-    {id:"i1",text:"صلاة ركعتين قيام بـ١٠ آيات على الأقل",hidden:false},
-    {id:"i2",text:"صلاة الوتر",hidden:false}]},
-  {id:"s7",icon:"🕌",color:"#c8e6c9",title:"سنة الجمعة",hidden:false,items:[
-    {id:"i1",text:"سورة الكهف يوم الجمعة",hidden:false}]}
+  {id:"s1",icon:"🌟",color:"#f48fb1",title:"أعمال العشر المباركات",hidden:false,items:[
+    {id:"i1",text:"الاهتمام بالصلوات المكتوبة",hidden:false},
+    {id:"i2",text:"الباقيات الصالحات",hidden:false},
+    {id:"i3",text:"التكبير المطلق",hidden:false},
+    {id:"i4",text:"الأذكار الموظفة",hidden:false},
+    {id:"i5",text:"الصدقة اليومية",hidden:false},
+    {id:"i6",text:"قيام الليل",hidden:false},
+    {id:"i7",text:"الصيام",hidden:false},
+    {id:"i8",text:"ورد القرءان",hidden:false},
+    {id:"i9",text:"الدعوة إلى الله",hidden:false}]}
 ];
 
 // ── الورد اليومي المفصّل ──────────────────────────────
@@ -510,7 +501,7 @@ let secs=[],chk={},hist={},tmpls={},notifs={},followers={};
 let myWatcher=null; // {uid, name} — admin watching this user
 let uid=null,isAdmin=false,editMode=false;
 let _saving=false; // prevent listener from overwriting during save
-let tId='default',tName='جدول عشر ذي الحجة';
+let tId='default',tName='أعمال العشر';
 let hPer=7,pPer=7,calY,calM;
 let dKey=null,dEdit=false;
 let sc=100,ic=1000;
@@ -737,7 +728,7 @@ window.startNewDay=()=>{
 
 // ── Template ─────────────────────────────────────────
 function updateTB(){
-  const n=tId==='default'?'جدول عشر ذي الحجة':tId==='mufassal'?'الورد اليومي المفصّل':(tmpls[tId]?.name||tId);
+  const n=tId==='default'?'أعمال العشر':tId==='mufassal'?'الورد اليومي المفصّل':(tmpls[tId]?.name||tId);
   $('tnbadge').textContent=n;$('htname').textContent=n;
 }
 window.openT=m=>{
@@ -747,7 +738,7 @@ window.openT=m=>{
   else if(m==='save'){const n=tId==='default'?'الورد الافتراضي':(tmpls[tId]?.name||'—');ti.textContent='💾 حفظ';tb.innerHTML=`<p style="font-size:13px;color:#333;margin-bottom:14px">تحديث <b style="color:#e91e8c">${n}</b>؟</p><div style="display:flex;gap:8px"><button class="tbtn" onclick="saveCT()" style="flex:1">تأكيد</button><button class="tbtn s" onclick="closeT()" style="flex:1">إلغاء</button></div>`;}
   else if(m==='pick'){
     ti.textContent='🎨 اختر Template';
-    const def=`<div class="tirow"><div style="flex:1"><div class="tiname">🌙 جدول عشر ذي الحجة</div><div class="timeta">الجدول الافتراضي</div></div><button class="tbtn${tId==='default'?' s':''}" onclick="applyT('default','جدول عشر ذي الحجة')">${tId==='default'?'الحالي':'تطبيق'}</button></div>
+    const def=`<div class="tirow"><div style="flex:1"><div class="tiname">🌙 أعمال العشر</div><div class="timeta">الجدول الافتراضي</div></div><button class="tbtn${tId==='default'?' s':''}" onclick="applyT('default','أعمال العشر')">${tId==='default'?'الحالي':'تطبيق'}</button></div>
 <div class="tirow"><div style="flex:1"><div class="tiname">🕋 الورد اليومي المفصّل</div><div class="timeta">الجدول الأساسي الكامل</div></div><button class="tbtn${tId==='mufassal'?' s':''}" onclick="applyT('mufassal','الورد اليومي المفصّل')">${tId==='mufassal'?'الحالي':'تطبيق'}</button></div>`;
     const items=Object.entries(tmpls).map(([id,t])=>`<div class="tirow"><div style="flex:1"><div class="tiname">${t.name}</div><div class="timeta">${(t.sections||[]).length} كارت${t.broadcast?' · 📢 مشترك':''}${t.shared?' · 🌐 مشترك للكل':''}</div></div><div style="display:flex;gap:4px"><button class="tbtn${tId===id?' s':''}" onclick="applyT('${id}','${t.name}')">${tId===id?'الحالي':'تطبيق'}</button>${!t.broadcast&&!t.shared?`<button class="tbtn" style="background:#ef5350" onclick="delT('${id}')">🗑</button>`:''}</div></div>`).join('');
     tb.innerHTML=def+items+(Object.keys(tmpls).length?'':'<p style="text-align:center;color:#ccc;font-size:12px;padding:16px">لا يوجد templates بعد</p>');
@@ -1110,7 +1101,7 @@ let bcSelectedId=null;
 function renderBcList(){
   const el=document.getElementById('bc-tmpl-list');if(!el)return;
   const list=[
-    {id:'default',name:'🌙 جدول عشر ذي الحجة',sections:DEF},
+    {id:'default',name:'🌙 أعمال العشر',sections:DEF},
     {id:'mufassal',name:'🕋 الورد اليومي المفصّل',sections:DEF_MUFASSAL},
     ...Object.entries(tmpls).filter(([,t])=>!t.sharedOnly).map(([id,t])=>({id,name:t.name,sections:t.sections}))
   ];
@@ -1127,7 +1118,7 @@ window.broadcastTmpl=()=>{
   if(!bcSelectedId){alert('اختر template أولاً');return;}
   const fls=Object.keys(followers);
   if(!fls.length){alert('لا يوجد متابَعون بعد');return;}
-  const src=bcSelectedId==='default'?{name:'جدول عشر ذي الحجة',sections:DEF}:bcSelectedId==='mufassal'?{name:'الورد اليومي المفصّل',sections:DEF_MUFASSAL}:(tmpls[bcSelectedId]||{});
+  const src=bcSelectedId==='default'?{name:'أعمال العشر',sections:DEF}:bcSelectedId==='mufassal'?{name:'الورد اليومي المفصّل',sections:DEF_MUFASSAL}:(tmpls[bcSelectedId]||{});
   if(!src.sections){alert('Template غير صالح');return;}
   if(!confirm(`إرسال "${src.name}" لـ ${fls.length} متابَع؟`))return;
   const tmplData={name:src.name,sections:JSON.parse(JSON.stringify(src.sections)),savedAt:Date.now(),broadcast:true,fromAdmin:uid};
